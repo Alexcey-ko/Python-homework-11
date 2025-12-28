@@ -186,14 +186,18 @@ class SbookRepository(Repository):
         """Удаление бронирования."""
         #Выборка бронирования
         sbook_query = select(Sbook).where(
-            Sbook.sbookid == sbookid,
-            Sbook.customid == scustom_id)
+            Sbook.sbookid == sbookid)
         sbook_stmt = await self.session.execute(sbook_query)
         sbook:Sbook|None = sbook_stmt.scalar_one_or_none()
         
         #Бронирования не существует
         if sbook is None:
             raise SbookDoesntExistsError()
+
+        #Проверка владельца бронирования
+        if sbook.customid != scustom_id:
+            #Пока не нужна
+            pass
 
         #Выборка Sflight для изменения занятых мест
         sflight_query = select(Sflight).where(
