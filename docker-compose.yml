@@ -42,7 +42,7 @@ services:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
       - REDIS_USER=${REDIS_USER}
       - REDIS_USER_PASSWORD=${REDIS_USER_PASSWORD}
-    ports:
+    expose:
       - "$REDIS_PORT:6379"
     volumes:
       - ./redisdata:/data
@@ -82,7 +82,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
-    ports:
+    expose:
       - "$POSTGRES_PORT:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
