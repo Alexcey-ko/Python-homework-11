@@ -1,10 +1,10 @@
-"""Описание сущностей для Spfli."""
+"""Схемы для Spfli."""
 
 from pydantic import BaseModel
 
 
-class SpfliData(BaseModel):
-    """Тип данных для объектов Spfli."""
+class SpfliSchema(BaseModel):
+    """Схема Spfli."""
     #Ключевые поля
     carrid: int
     connid: int

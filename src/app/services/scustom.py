@@ -2,19 +2,18 @@
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.entities import ScustomAuth, ScustomData
 from app.exceptions import UserAlreadyExistsError, UserDoesntExistsError
 from app.repositories.scustom import ScustomRepository
+from app.schemas import ScustomAuthSchema, ScustomSchema
 
 
 class ScustomService:
     """Класс-сервис аэропортов."""
-    def __init__(self, session: AsyncSession|None):
+    def __init__(self, session: AsyncSession):
         """Инициализация сервиса."""
-        self.session = session
-        self.scust_repo = ScustomRepository(self.session)
+        self.scust_repo = ScustomRepository(session)
 
-    async def sign_in(self, email:str, phone_number:str) -> ScustomAuth:
+    async def sign_in(self, email:str, phone_number:str) -> ScustomAuthSchema:
         """Авторизация пользователя.
 
         Args:
@@ -22,18 +21,18 @@ class ScustomService:
             phone_number (str): номер телефона пользователя
 
         Returns:
-            bool: результат авторизации
+            ScustomAuthSchema: результат авторизации
         """
         scustom = await self.scust_repo.get_scustom_by_email(email)
         if scustom:
-            return ScustomAuth(
+            return ScustomAuthSchema(
                     id = scustom.id,
                     email = scustom.email,
                     auth = phone_number == scustom.phone_number )
         else:
             raise UserDoesntExistsError
 
-    async def sign_up(self, email:str, phone_number:str, name:str) -> ScustomAuth|None:
+    async def sign_up(self, email:str, phone_number:str, name:str) -> ScustomAuthSchema|None:
         """Регистрация пользователя.
 
         Args:
@@ -41,7 +40,7 @@ class ScustomService:
             phone_number (str): номер телефона пользователя
             name (str): ФИО пользователя
         """
-        scust_data = ScustomData(
+        scust_data = ScustomSchema(
                         email = email, 
                         phone_number = phone_number, 
                         name = name )
@@ -51,7 +50,7 @@ class ScustomService:
             return None
         
         if scustom:
-            return ScustomAuth(
+            return ScustomAuthSchema(
                     id = scustom.id,
                     email = scustom.email,
                     auth = phone_number == scustom.phone_number )

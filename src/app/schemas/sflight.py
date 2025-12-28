@@ -1,4 +1,4 @@
-"""Описание сущностей для Sflight."""
+"""Схемы для Sflight."""
 
 from datetime import date
 from decimal import Decimal
@@ -6,8 +6,8 @@ from decimal import Decimal
 from pydantic import BaseModel
 
 
-class SflightData(BaseModel):
-    """Тип данных для объектов Sflight."""
+class SflightSchema(BaseModel):
+    """Схема Sflight."""
     #Ключевые поля
     carrid: int
     connid: int

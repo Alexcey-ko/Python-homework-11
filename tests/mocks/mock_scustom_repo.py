@@ -1,7 +1,7 @@
 """Моковый репозиторий клиентов."""
 
-from app.entities import ScustomData
 from app.exceptions import UserAlreadyExistsError
+from app.schemas import ScustomSchema
 
 
 class MockScustomRepository():
@@ -9,17 +9,17 @@ class MockScustomRepository():
 
     def __init__(self) -> None:
         """Инициализация репозитория."""
-        self._data:list[ScustomData] = []
+        self._data:list[ScustomSchema] = []
         self._email_index:dict[str, int] = {}
         self._id_inc: int = 1
         self._unique_email = set()
 
-    async def get_scustom_by_email(self, email:str)->ScustomData|None:
+    async def get_scustom_by_email(self, email:str)->ScustomSchema|None:
         """Выбор клиента по email."""
         scustom_index = self._email_index.get(email, None)
         return self._data[self._email_index[email]] if scustom_index is not None else None
     
-    async def create_scustom_single(self, scustom:ScustomData)->ScustomData:
+    async def create_scustom_single(self, scustom:ScustomSchema)->ScustomSchema:
         """Добавление одного нового клиента."""
         #Проверка, что email ещё не присвоен ни одному пользователю
         if scustom.email in self._unique_email:
@@ -36,7 +36,7 @@ class MockScustomRepository():
         return scustom
 
 
-    async def create_scustom_list(self, scustom_list: list[ScustomData]) -> list[ScustomData]:
+    async def create_scustom_list(self, scustom_list: list[ScustomSchema]) -> list[ScustomSchema]:
         """Создание одной записи в таблице Scustom."""
         unique_email = set(str)
         #Проверка что среди пользователей нету email, который уже присвоен другому пользователю

@@ -5,7 +5,7 @@ import random
 import factory
 from faker import Faker
 
-from app.entities import SbookData, ScustomData, SflightData
+from app.schemas import SbookSchema, ScustomSchema, SflightSchema
 
 faker = Faker('ru_RU')
 
@@ -13,7 +13,7 @@ class SbookDataFactory(factory.Factory):
     """Фабрика рейсов."""
     class Meta:
         """Описание модели данных."""
-        model = SbookData
+        model = SbookSchema
 
     _bookid_set = {}
     
@@ -25,7 +25,7 @@ class SbookDataFactory(factory.Factory):
     seats = factory.LazyFunction(lambda: None)
 
     @classmethod
-    def build_with_refs(cls, sflight_list: list[SflightData], scustom_list: list[ScustomData]) -> SbookData:
+    def build_with_refs(cls, sflight_list: list[SflightSchema], scustom_list: list[ScustomSchema]) -> SbookSchema:
         """Построение через списки зависимых данных."""
         #Множество уникальных дат одинаковых маршрутов
         for sflight in sflight_list:
@@ -53,7 +53,7 @@ class SbookDataFactory(factory.Factory):
             seats = 1 )
     
     @classmethod
-    def build_with_refs_batch(cls, size: int, sflight_list: list[SflightData], scustom_list: list[ScustomData]) -> list[SbookData]:
+    def build_with_refs_batch(cls, size: int, sflight_list: list[SflightSchema], scustom_list: list[ScustomSchema]) -> list[SbookSchema]:
         """Построение списка через зависимые данные."""
         return [cls.build_with_refs(sflight_list, scustom_list) for _ in range(size)]
     

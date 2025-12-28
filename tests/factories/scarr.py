@@ -2,14 +2,14 @@
 
 import factory
 
-from app.entities.scarr import ScarrData
+from app.schemas import ScarrSchema
 
 
 class ScarrDataFactory(factory.Factory):
     """Фабрика перевозчиков."""
     class Meta:
         """Описание модели данных."""
-        model = ScarrData
+        model = ScarrSchema
 
     carrname = factory.Faker('company', locale = 'ru_RU')
     carrcode = factory.Faker('ean', length = 8, locale = 'ru_RU')

@@ -105,7 +105,7 @@ class Cache:
         with contextlib.suppress(ConnectionError):
             self.set(key, value, period, db=CACHE_DB)
 
-cache = Cache(  host = config.REDIS_URL,
+cache = Cache(  host = config.REDIS_HOST,
                 port = config.REDIS_PORT,
                 username = config.REDIS_USER,
                 password = config.REDIS_USER_PASSWORD)

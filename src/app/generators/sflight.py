@@ -7,8 +7,7 @@ from decimal import Decimal
 
 from faker import Faker
 
-from app.entities.sflight import SflightData
-from app.entities.spfli import SpfliData
+from app.schemas import SflightSchema, SpfliSchema
 
 
 def generate_planetype():
@@ -17,7 +16,7 @@ def generate_planetype():
     number = random.randint(100, 999)
     return f'{letter}{number}'
 
-def generate_sflight(spfli:list[SpfliData], n:int=5)->list[SflightData]:
+def generate_sflight(spfli:list[SpfliSchema], n:int=5)->list[SflightSchema]:
     """Генерация списка SFLIGHT для mandt из n позиций."""
     faker = Faker()
     sflight_list = []
@@ -40,7 +39,7 @@ def generate_sflight(spfli:list[SpfliData], n:int=5)->list[SflightData]:
                 fldate_set[spfl.carrid][spfl.connid].add(new_fldate)
                 break
 
-        sflight_list.append(SflightData(
+        sflight_list.append(SflightSchema(
             carrid = spfl.carrid,
             connid = spfl.connid,
             fldate = new_fldate,

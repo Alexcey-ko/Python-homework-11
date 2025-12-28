@@ -13,11 +13,16 @@ class Config(BaseSettings):
     POSTGRES_PORT:int = 5432
 
     #CACHE
-    REDIS_URL:str = 'localhost'
+    REDIS_HOST:str = 'localhost'
     REDIS_PORT:int = 6379
     REDIS_USER:str
     REDIS_USER_PASSWORD:str
     REDIS_PASSWORD:str
+
+    #AUTH
+    JWT_SECRET_KEY:str
+    JWT_ACCESS_COOKIE_NAME:str = 'access_token'
+    JWT_TOKEN_LOCATION:list[str] = ['cookies']
 
     #pydantic
     model_config = SettingsConfigDict(frozen = True, extra = 'allow', env_file = '.env', env_file_encoding = 'utf-8')

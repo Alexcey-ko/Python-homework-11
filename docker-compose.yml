@@ -1,7 +1,43 @@
 services:
+  init-db:
+    build:
+      context: .
+      dockerfile: docker_python
+    container_name: hw11_init_db_container
+    environment:
+      - POSTGRES_HOST=db
+      - REDIS_HOST=redis
+    restart: "no"
+    depends_on:
+      - db
+      - redis
+    command: >
+      sh -c '
+        mkdir -p /code &&
+        poetry run alembic revision --autogenerate -m "auto" &&
+        poetry run alembic upgrade head &&
+        poetry run python -m src.app.generators.generate_data
+      '
+
+  fastapi:
+    build:
+      context: .
+      dockerfile: docker_python
+    container_name: hw11_fastapi_container
+    environment:
+      - POSTGRES_HOST=db
+      - REDIS_HOST=redis
+    restart: always
+    ports:
+      - "$FASTAPI_PORT:8000"
+    depends_on:
+      - db
+      - redis
+    command: ["fastapi", "run", "src/app/main.py", "--port", "8000"]
+
   redis:
     image: redis:latest
-    container_name: hw10_redis_container
+    container_name: hw11_redis_container
     environment:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
       - REDIS_USER=${REDIS_USER}
@@ -40,7 +76,7 @@ services:
 
   db:
     image: postgres:alpine
-    container_name: hw10_postgres_container
+    container_name: hw11_postgres_container
     restart: always
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
@@ -50,6 +86,10 @@ services:
       - "$POSTGRES_PORT:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
-
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
 volumes:
   pgdata:

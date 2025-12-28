@@ -5,14 +5,14 @@ from collections import defaultdict
 
 import factory
 
-from app.entities import SairportData, ScarrData, SpfliData
+from app.schemas import SairportSchema, ScarrSchema, SpfliSchema
 
 
 class SpfliDataFactory(factory.Factory):
     """Фабрика маршрутов."""
     class Meta:
         """Описание модели данных."""
-        model = SpfliData
+        model = SpfliSchema
 
     _connid_counters: dict[int, int] = defaultdict(int)
 
@@ -32,7 +32,7 @@ class SpfliDataFactory(factory.Factory):
     fltime = factory.LazyFunction(lambda: random.randint(20, 1200))
 
     @classmethod
-    def build_with_refs(cls, scarr_list: list[ScarrData], sairport_list: list[SairportData]) -> SpfliData:
+    def build_with_refs(cls, scarr_list: list[ScarrSchema], sairport_list: list[SairportSchema]) -> SpfliSchema:
         """Построение через списки зависимых данных."""
         #Выбор случайного перевозчика из списка
         scarr = random.choice(scarr_list)
@@ -46,7 +46,7 @@ class SpfliDataFactory(factory.Factory):
             airpto = airpto.id )
     
     @classmethod
-    def build_with_refs_batch(cls, size: int, scarr_list: list[ScarrData], sairp_list: list[SairportData]) -> list[SpfliData]:
+    def build_with_refs_batch(cls, size: int, scarr_list: list[ScarrSchema], sairp_list: list[SairportSchema]) -> list[SpfliSchema]:
         """Построение списка через зависимые данные."""
         return [cls.build_with_refs(scarr_list, sairp_list) for _ in range(size)]
 

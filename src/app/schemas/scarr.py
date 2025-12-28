@@ -1,10 +1,10 @@
-"""Описание сущностей для Scarr."""
+"""Схемы для Scarr."""
 
 from pydantic import BaseModel
 
 
-class ScarrData(BaseModel):
-    """Тип данных для объектов Scarr."""
+class ScarrSchema(BaseModel):
+    """Схема Scarr."""
     #Ключевые поля
     carrid: int|None = None
     #Вторичные поля

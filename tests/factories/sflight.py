@@ -8,7 +8,7 @@ from decimal import Decimal
 import factory
 from faker import Faker
 
-from app.entities import SflightData, SpfliData
+from app.schemas import SflightSchema, SpfliSchema
 
 faker = Faker('ru_RU')
 
@@ -22,7 +22,7 @@ class SflightDataFactory(factory.Factory):
     """Фабрика рейсов."""
     class Meta:
         """Описание модели данных."""
-        model = SflightData
+        model = SflightSchema
 
     _fldate_set = {}
 
@@ -37,7 +37,7 @@ class SflightDataFactory(factory.Factory):
     av_seats = seatsmax
     
     @classmethod
-    def build_with_refs(cls, spfli_list: list[SpfliData]) -> SflightData:
+    def build_with_refs(cls, spfli_list: list[SpfliSchema]) -> SflightSchema:
         """Построение через списки зависимых данных."""
         #Множество уникальных дат одинаковых маршрутов
         for spfl in spfli_list:
@@ -62,7 +62,7 @@ class SflightDataFactory(factory.Factory):
             fldate = new_fldate )
     
     @classmethod
-    def build_with_refs_batch(cls, size: int, spfli_list: list[SpfliData]) -> list[SflightData]:
+    def build_with_refs_batch(cls, size: int, spfli_list: list[SpfliSchema]) -> list[SflightSchema]:
         """Построение списка через зависимые данные."""
         return [cls.build_with_refs(spfli_list) for _ in range(size)]
     

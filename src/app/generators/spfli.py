@@ -2,12 +2,10 @@
 
 import random
 
-from app.entities.sairport import SairportData
-from app.entities.scarr import ScarrData
-from app.entities.spfli import SpfliData
+from app.schemas import SairportSchema, ScarrSchema, SpfliSchema
 
 
-def generate_spfli(scarrs:list[ScarrData], sairport:list[SairportData], n:int=5, connid_sync = None)->list[SpfliData]:
+def generate_spfli(scarrs:list[ScarrSchema], sairport:list[SairportSchema], n:int=5, connid_sync = None)->list[SpfliSchema]:
     """Генерация списка SPFLI для mandt из n позиций."""
     spfli_list = []
     connid_max = connid_sync or {}
@@ -18,7 +16,7 @@ def generate_spfli(scarrs:list[ScarrData], sairport:list[SairportData], n:int=5,
         carrid = scarr.carrid
         new_connid = connid_max.get(carrid, 0) + 1
         connid_max[carrid] = new_connid
-        spfli_list.append(SpfliData(
+        spfli_list.append(SpfliSchema(
             carrid = carrid,
             connid = new_connid,
             fltime = random.randint(20, 1200),#от 20 минут до 20 часов

@@ -2,16 +2,16 @@
 
 from faker import Faker
 
-from app.entities.sairport import SairportData
+from app.schemas import SairportSchema
 
 
-def generate_sairport(n:int=5)->list[SairportData]:
+def generate_sairport(n:int=5)->list[SairportSchema]:
     """Генерация списка SAIRPORT для mandt из n позиций."""
     fake = Faker('ru_RU')
-    sairport_list:list[SairportData] = []
+    sairport_list:list[SairportSchema] = []
     for _ in range(n):
         sairport_list.append(
-            SairportData(
+            SairportSchema(
                 name=f'Аэропорт {fake.company()}',
                 timezone=fake.timezone(),
                 country=fake.country(),

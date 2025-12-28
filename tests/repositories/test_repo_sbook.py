@@ -66,7 +66,7 @@ class TestSbookRepository:
             seats_to_book = 5
             seatsocc_expected = sflight_data.seatsocc + seats_to_book
             #Бронирование рейса
-            book_data = await sbook_repo.book_flight(sflight_data, scustom_data, seats_to_book)
+            book_data = await sbook_repo.book_flight(sflight_data.carrid, sflight_data.connid, sflight_data.fldate,  scustom_data.id, seats_to_book)
 
             #Проверка существования брони в БД
             sbook_query = select(Sbook).filter_by(
@@ -99,4 +99,4 @@ class TestSbookRepository:
             seats_to_book = sflight_data.seatsmax - sflight_data.seatsocc + 10
             #Бронирование рейса
             with pytest.raises(NotEnoughSeatsError):
-                await sbook_repo.book_flight(sflight_data, scustom_data, seats_to_book)
+                await sbook_repo.book_flight(sflight_data.carrid, sflight_data.connid, sflight_data.fldate,  scustom_data.id, seats_to_book)

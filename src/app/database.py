@@ -21,13 +21,13 @@ def get_async_engine():
     """Создание асинхронного движка для работы с БД."""
     return sa_async.create_async_engine(
         url = get_db_url(),
-        #echo=True,
+        echo=True,
     )
 
 #Движок для работы с БД
 engine: sa_async.AsyncEngine = get_async_engine()
 
-#Фабрику сессий
+#Фабрика сессий
 async_session:sa_async.async_sessionmaker[sa_async.AsyncSession] = sessionmaker(
     engine, 
     expire_on_commit = False, 

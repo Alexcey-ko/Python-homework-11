@@ -2,7 +2,7 @@
 
 from sqlalchemy import select
 
-from app.entities.sairport import SairportData
+from app.schemas import SairportSchema
 from app.models import Sairport
 from app.repositories.base import Repository
 
@@ -17,7 +17,7 @@ class SairportRepository(Repository):
         result = stmt.scalars().all()
         return result
 
-    def _create_sairport(self, sairport: SairportData) -> Sairport:
+    def _create_sairport(self, sairport: SairportSchema) -> Sairport:
         """Создание записи в таблице Sairport."""
         new_sairport = Sairport(
             id = sairport.id,
@@ -29,26 +29,26 @@ class SairportRepository(Repository):
 
         return new_sairport
     
-    async def create_sairport_single(self, sairport: SairportData) -> SairportData:
+    async def create_sairport_single(self, sairport: SairportSchema) -> SairportSchema:
         """Создание одной записи в таблице Sairport."""
         new_sairport = self._create_sairport(sairport)
         self.session.add(new_sairport)
         await self.session.flush()
 
-        return SairportData(
+        return SairportSchema(
                 id = new_sairport.id,
                 name = new_sairport.name,
                 timezone = new_sairport.timezone,
                 country = new_sairport.country,
                 city = new_sairport.city )
 
-    async def create_sairport_list(self, sairport_list: list[SairportData]) -> list[SairportData]:
+    async def create_sairport_list(self, sairport_list: list[SairportSchema]) -> list[SairportSchema]:
         """Создание одной записи в таблице Sairport."""
         result_list = [self._create_sairport(new_sairport) for new_sairport in sairport_list]
         self.session.add_all(result_list)
         await self.session.flush()
 
-        return [SairportData(
+        return [SairportSchema(
                 id = sairp.id,
                 name = sairp.name,
                 timezone = sairp.timezone,

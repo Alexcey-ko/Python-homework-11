@@ -2,14 +2,14 @@
 
 import factory
 
-from app.entities.sairport import SairportData
+from app.schemas import SairportSchema
 
 
 class SairportDataFactory(factory.Factory):
     """Фабрика аэропортов."""
     class Meta:
         """Описание модели данных."""
-        model = SairportData
+        model = SairportSchema
 
     name = factory.Sequence(lambda n: f'Аэропорт {n}')
     city = factory.Sequence(lambda n: f'Город-{n}')

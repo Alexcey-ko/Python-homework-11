@@ -1,0 +1,12 @@
+FROM python:3.13
+
+WORKDIR /code
+
+COPY src ./src
+COPY alembic ./alembic
+COPY alembic.ini .env pyproject.toml README.md ./
+
+RUN pip install poetry
+ENV POETRY_VIRTUALENVS_CREATE=false
+RUN poetry install
+RUN pip install -e .
