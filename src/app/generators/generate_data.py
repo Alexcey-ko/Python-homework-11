@@ -32,6 +32,12 @@ def print_scustoms(scustom_list):
     for scustom in scustom_list:
         print(f'{scustom.email} - {scustom.phone_number} - {scustom.name}')
 
+def print_sflights(sflight_list):
+    """Вывод сгенерированных рейсов."""
+    print('Сгенерированные рейсы.')
+    for sflight in sflight_list:
+        print(f'{sflight.carrid} - {sflight.connid} - {sflight.fldate} макс.мест {sflight.seatsmax}, занято {sflight.seatsocc}')
+
 async def generate_all(airp_n: int = 5, carr_n: int = 5, cust_n: int = 5, spfli_n: int = 5, sflight_n: int = 5, sbook_n: int = 5):
     """Генерация данных для всех таблиц и коммит в БД."""
     async with async_session() as session:
@@ -72,6 +78,7 @@ async def generate_all(airp_n: int = 5, carr_n: int = 5, cust_n: int = 5, spfli_
         print('Данные успешно сгененрированы и добавлены в БД.')
         print_scustoms(scustom_list)
         print_routes(sairport_list, spfli_list, sflight_list)
+        print_sflights(sflight_list)
 
 if __name__ == '__main__':
     asyncio.run(generate_all(4, 5, 5, 25, 75, 20))
