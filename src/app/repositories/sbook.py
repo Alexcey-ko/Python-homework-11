@@ -222,6 +222,7 @@ class SbookRepository(Repository):
             if self.cache:
                 self.cache.cache_set(cache_key, av_seats, 60 * 60 * 24)
             return SbookSchema(
+                sbookid = sbook.sbookid,
                 carrid = sbook.carrid,
                 connid = sbook.connid,
                 fldate = sbook.fldate,
@@ -252,6 +253,7 @@ class SbookRepository(Repository):
         await self.session.flush()
 
         return SbookSchema(
+            sbookid = new_sbook.sbookid,
             carrid = new_sbook.carrid,
             connid = new_sbook.connid,
             fldate = new_sbook.fldate,
@@ -266,6 +268,7 @@ class SbookRepository(Repository):
         await self.session.flush()
 
         return [SbookSchema(
+                sbookid = sbook.sbookid,
                 carrid = sbook.carrid,
                 connid = sbook.connid,
                 fldate = sbook.fldate,
