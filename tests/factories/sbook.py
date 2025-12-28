@@ -17,6 +17,7 @@ class SbookDataFactory(factory.Factory):
 
     _bookid_set = {}
     
+    sbookid = None
     carrid = factory.LazyFunction(lambda: None)
     connid = factory.LazyFunction(lambda: None)
     fldate = factory.LazyFunction(lambda: None)

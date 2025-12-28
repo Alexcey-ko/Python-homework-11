@@ -12,7 +12,7 @@ def generate_scustom(n:int=5)->list[ScustomSchema]:
     for _ in range(n):
         scustom_list.append(ScustomSchema(
             email = fake.email(),
-            phone_number = fake.phone_number(),
+            phone_number = '+7' + fake.numerify('#' * 10),
             name = fake.name(),
         ))
     return scustom_list

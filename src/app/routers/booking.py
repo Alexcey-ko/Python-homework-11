@@ -1,10 +1,11 @@
 """Роуты для работы с бронированием рейсов."""
 
-from typing import Annotated
+from typing import Annotated, Optional
 
-from fastapi import APIRouter, Path
+from fastapi import APIRouter, HTTPException, Path
 
 from app.dependencies import AccessTokenUserDep, SbookServiceDep
+from app.exceptions import NotEnoughSeatsError, SbookDoesntExistsError
 from app.schemas.sbook import BookingSchema, SbookResponseSchema, SbookSchema
 
 router = APIRouter(prefix='', tags=['Бронирование'])
@@ -19,14 +20,14 @@ async def get_books(service: SbookServiceDep)  -> list[SbookResponseSchema]:
 
 @router.get('/books/{sbookid}',
             summary='Получение бронирования по ID',
-            response_model=SbookResponseSchema
+            response_model=Optional[SbookResponseSchema]
 )
 async def get_book_by_id(
     sbookid: Annotated[int, Path(..., description = 'ID бронирования')],
     service: SbookServiceDep, 
-)  -> SbookResponseSchema:
+)  -> Optional[SbookResponseSchema]:
     """Получение списка всех бронирований."""
-    return await service.get_sbook_by_id(sbookid = sbookid)
+    return await service.get_sbook_by_id(sbookid)
 
 @router.post('/books',
             summary='Бронирование рейса',
@@ -38,7 +39,10 @@ async def book_sflight(
     scustom: AccessTokenUserDep,
 ) -> SbookSchema:
     """Бронирование рейса."""
-    return await service.book_flight(booking.carrid, booking.connid, booking.fldate, scustom.id, booking.seats)
+    try:
+        return await service.book_flight(booking.carrid, booking.connid, booking.fldate, scustom.id, booking.seats)
+    except NotEnoughSeatsError as err:
+        raise HTTPException(status_code=409, detail='Not enough seats available for this flight.') from err
 
 @router.delete('/books/{sbookid}',
             summary='Удаление бронирования по ID',
@@ -49,4 +53,7 @@ async def delete_sbook(
     scustom: AccessTokenUserDep,
 ):
     """Удаление бронирования."""
-    return await service.delete_sbook(sbookid, scustom.id)
+    try:
+        return await service.delete_sbook(sbookid, scustom.id)
+    except SbookDoesntExistsError as err:
+        raise HTTPException(status_code=404, detail='Booking not found.') from err

@@ -1,10 +1,11 @@
 """Фабрики для клиентов."""
 
 import factory
+from faker import Faker
 
 from app.schemas import ScustomSchema
 
-
+fake = Faker('ru_RU')
 class ScustomDataFactory(factory.Factory):
     """Фабрика клиентов."""
     class Meta:
@@ -12,5 +13,7 @@ class ScustomDataFactory(factory.Factory):
         model = ScustomSchema
 
     email = factory.Faker('email', locale = 'ru_RU')
-    phone_number = factory.Faker('phone_number', locale = 'ru_RU')
+    phone_number = '+7' + fake.numerify('#' * 10)
     name = factory.Faker('name', locale = 'ru_RU')
+
+print(ScustomDataFactory())

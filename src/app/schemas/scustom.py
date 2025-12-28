@@ -1,4 +1,4 @@
-"""Схемы для SCUSTOM."""
+"""Схемы для Scustom."""
 
 import re
 
@@ -25,10 +25,10 @@ class ScustomSchema(BaseModel):
     phone_number: str
     name: str | None
 
-    #@field_validator('phone_number')
-    #@classmethod
-    #def validate_phone_number(cls, values:str) -> str:
-    #    """Валидация номера телефона."""
-    #    if not re.match(r'^\+\d{1,15}$', values):
-    #        raise ValueError('Номер телефона должен начинаться с "+" и содержать от 1 до 15 цифр')
-    #    return values
+    @field_validator('phone_number')
+    @classmethod
+    def validate_phone_number(cls, values:str) -> str:
+        """Валидация номера телефона."""
+        if not re.match(r'^\+\d{1,15}$', values):
+            raise ValueError('Номер телефона должен начинаться с "+" и содержать от 1 до 15 цифр')
+        return values

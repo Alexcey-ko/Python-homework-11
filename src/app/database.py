@@ -19,10 +19,7 @@ def get_db_url(dialect:str = 'postgresql', driver:str = 'asyncpg')->URL:
 
 def get_async_engine():
     """Создание асинхронного движка для работы с БД."""
-    return sa_async.create_async_engine(
-        url = get_db_url(),
-        #echo=True,
-    )
+    return sa_async.create_async_engine(url = get_db_url())
 
 #Движок для работы с БД
 engine: sa_async.AsyncEngine = get_async_engine()

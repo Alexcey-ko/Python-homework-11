@@ -18,6 +18,12 @@ class NotEnoughSeatsError(Exception):
         """Инициализация сообщения."""
         super().__init__(message)
 
+class SbookDoesntExistsError(Exception):
+    """Исключение. Бронирование не найдено."""
+    def __init__(self, message: str = 'Бронирование не найдено.'):
+        """Инициализация сообщения."""
+        super().__init__(message)
+
 class SflightNotFoundError(Exception):
     """Исключение. Рейс не найден."""
     def __init__(self, message: str = 'Рейс не найден.'):

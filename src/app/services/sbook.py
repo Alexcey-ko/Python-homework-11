@@ -22,7 +22,7 @@ class SbookService:
         """Получение всех бронирований."""
         return await self.sbook_repo.get_sbooks()
 
-    async def get_sbook_by_id(self, sbookid:int) -> list[SbookResponseSchema]:
+    async def get_sbook_by_id(self, sbookid:int) -> SbookResponseSchema|None:
         """Получение бронирований с фильтрами."""
         return await self.sbook_repo.get_sbook_by_id(sbookid)
 

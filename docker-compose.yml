@@ -42,8 +42,10 @@ services:
       - REDIS_PASSWORD=${REDIS_PASSWORD}
       - REDIS_USER=${REDIS_USER}
       - REDIS_USER_PASSWORD=${REDIS_USER_PASSWORD}
-    expose:
-      - 6379
+    ports:
+      - "$REDIS_PORT:6379"
+    # expose:
+    #   - 6379
     volumes:
       - ./redisdata:/data
     deploy:
@@ -67,8 +69,8 @@ services:
       '
     healthcheck:
       test: ["CMD", "redis-cli", "-a", "$REDIS_PASSWORD", "ping"]
-      interval: 30s
-      timeout: 10s
+      interval: 3s
+      timeout: 30s
       retries: 5
     restart: unless-stopped
     tty: true
@@ -82,14 +84,16 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_DB}
-    expose:
-      - 5432
+    ports:
+      - "$POSTGRES_PORT:5432"
+    # expose:
+    #   - 5432
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "sh -c 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}'"]
-      interval: 10s
-      timeout: 3s
+      interval: 3s
+      timeout: 30s
       retries: 3
 volumes:
   pgdata:

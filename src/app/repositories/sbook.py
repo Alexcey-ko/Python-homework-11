@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import aliased
 
 from app.cache import Cache
-from app.exceptions import NotEnoughSeatsError
+from app.exceptions import NotEnoughSeatsError, SbookDoesntExistsError
 from app.models import Sairport, Sbook, Scarr, Sflight, Spfli
 from app.repositories.base import Repository
 from app.repositories.sflight import SflightRepository
@@ -190,6 +190,10 @@ class SbookRepository(Repository):
             Sbook.customid == scustom_id)
         sbook_stmt = await self.session.execute(sbook_query)
         sbook:Sbook|None = sbook_stmt.scalar_one_or_none()
+        
+        #Бронирования не существует
+        if sbook is None:
+            raise SbookDoesntExistsError()
 
         #Выборка Sflight для изменения занятых мест
         sflight_query = select(Sflight).where(
