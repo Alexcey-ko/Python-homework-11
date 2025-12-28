@@ -172,6 +172,7 @@ class SbookRepository(Repository):
             if self.cache:
                 self.cache.cache_set(cache_key, av_seats, 60 * 60 * 24)
             return SbookSchema(
+                    sbookid = new_sbook.sbookid,
                     carrid = new_sbook.carrid,
                     connid = new_sbook.connid,
                     fldate = new_sbook.fldate,
@@ -234,6 +235,7 @@ class SbookRepository(Repository):
     def _create_sbook(self, sbook:SbookSchema) -> Sbook:
         """Создание записи в таблице Sbook."""
         new_sbook = Sbook(
+            sbookid = sbook.sbookid,
             carrid = sbook.carrid,
             connid = sbook.connid,
             fldate = sbook.fldate,
