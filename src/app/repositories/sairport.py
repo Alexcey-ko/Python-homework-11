@@ -2,9 +2,9 @@
 
 from sqlalchemy import select
 
-from app.schemas import SairportSchema
 from app.models import Sairport
 from app.repositories.base import Repository
+from app.schemas import SairportSchema
 
 
 class SairportRepository(Repository):

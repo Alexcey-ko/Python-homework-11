@@ -2,8 +2,8 @@
 
 from fastapi import FastAPI
 
-from app.api.routers import main_router
 from app.auth import security
+from app.routers import main_router
 
 app = FastAPI(title = 'Booking API')
 app.include_router(main_router)

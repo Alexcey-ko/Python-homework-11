@@ -30,10 +30,7 @@ class SbookRepository(Repository):
 
         sbooks_query = (
             select(
-                Sbook.carrid,
-                Sbook.connid,
-                Sbook.fldate,
-                Sbook.bookid,
+                Sbook.sbookid,
                 Scarr.carrname,
                 sairp_from.city.label('cityfrom'),
                 Spfli.airpfrom,
@@ -56,6 +53,36 @@ class SbookRepository(Repository):
         sbooks_stmt = await self.session.execute(sbooks_query)
         return sbooks_stmt.mappings().all()
 
+    async def get_sbook_by_id(self, sbookid) -> SbookResponseSchema|None:
+        """Получение бронирования по ID."""
+        sairp_from = aliased(Sairport)
+        sairp_to = aliased(Sairport)
+
+        sbooks_query = (
+            select(
+                Sbook.sbookid,
+                Scarr.carrname,
+                sairp_from.city.label('cityfrom'),
+                Spfli.airpfrom,
+                sairp_to.city.label('cityto'),
+                Spfli.airpto,
+                Spfli.fltime,
+                Sflight.price,
+                Sflight.currency )
+            .join(Sflight, 
+                and_(Sflight.carrid == Sbook.carrid, 
+                    Sflight.connid == Sbook.connid,
+                    Sflight.fldate == Sbook.fldate ))
+            .join(Scarr, Scarr.carrid == Sbook.carrid)
+            .join(Spfli, 
+                and_(Spfli.carrid == Sbook.carrid,
+                    Spfli.connid == Sbook.connid))
+            .join(sairp_from, sairp_from.id == Spfli.airpfrom)
+            .join(sairp_to, sairp_to.id == Spfli.airpto) 
+        ).where(Sbook.sbookid == sbookid)
+        sbooks_stmt = await self.session.execute(sbooks_query)
+        return sbooks_stmt.mappings().one_or_none()
+
     async def get_sbooks_filtered(self, carrid:int|None = None, connid:int|None = None, fldate: date|None = None) -> list[SbookResponseSchema]:
         """Получение всех бронирований."""
         sairp_from = aliased(Sairport)
@@ -73,10 +100,7 @@ class SbookRepository(Repository):
         #Основной запрос
         sbooks_query = (
             select(
-                Sbook.carrid,
-                Sbook.connid,
-                Sbook.fldate,
-                Sbook.bookid,
+                Sbook.sbookid,
                 Scarr.carrname,
                 sairp_from.city.label('cityfrom'),
                 Spfli.airpfrom,
@@ -158,23 +182,20 @@ class SbookRepository(Repository):
             await self.session.rollback()
             return None
         
-    async def delete_sbook(self, carrid:int, connid:int, fldate: date, bookid: int, scustom_id: int) -> SbookSchema|None:
+    async def delete_sbook(self, sbookid: int, scustom_id: int) -> SbookSchema|None:
         """Удаление бронирования."""
         #Выборка бронирования
         sbook_query = select(Sbook).where(
-            Sbook.carrid == carrid,
-            Sbook.connid == connid,
-            Sbook.fldate == fldate,
-            Sbook.bookid == bookid,
+            Sbook.sbookid == sbookid,
             Sbook.customid == scustom_id)
         sbook_stmt = await self.session.execute(sbook_query)
         sbook:Sbook|None = sbook_stmt.scalar_one_or_none()
 
         #Выборка Sflight для изменения занятых мест
         sflight_query = select(Sflight).where(
-            Sflight.carrid == carrid,
-            Sflight.connid == connid,
-            Sflight.fldate == fldate)
+            Sflight.carrid == sbook.carrid,
+            Sflight.connid == sbook.connid,
+            Sflight.fldate == sbook.fldate)
         sflight_stmt = await self.session.execute(sflight_query)
         sflight:Sflight|None = sflight_stmt.scalar_one_or_none()
 

@@ -12,11 +12,12 @@ class Sbook(Base):
     """Класс представляющий таблицу БД SBOOK."""
     __tablename__ = 'sbook'
     #Ключевые поля
-    carrid: Mapped[int] = mapped_column(Integer, ForeignKey('scarr.carrid'), primary_key=True)
-    connid: Mapped[int] = mapped_column(Integer, primary_key=True)
-    fldate: Mapped[date] = mapped_column(Date, primary_key=True)
-    bookid: Mapped[int] = mapped_column(Integer, primary_key=True)
+    sbookid: Mapped[int] = mapped_column(Integer, primary_key=True)
     #Вторичные поля
+    carrid: Mapped[int] = mapped_column(Integer, ForeignKey('scarr.carrid'))
+    connid: Mapped[int] = mapped_column(Integer)
+    fldate: Mapped[date] = mapped_column(Date)
+    bookid: Mapped[int] = mapped_column(Integer)
     customid: Mapped[int] = mapped_column(Integer, ForeignKey('scustom.id'))
     seats: Mapped[int] = mapped_column(Integer, nullable=False)
 

@@ -21,7 +21,7 @@ def get_async_engine():
     """Создание асинхронного движка для работы с БД."""
     return sa_async.create_async_engine(
         url = get_db_url(),
-        echo=True,
+        #echo=True,
     )
 
 #Движок для работы с БД

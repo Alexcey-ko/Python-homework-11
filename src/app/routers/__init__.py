@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from app.api.routers.auth import router as auth_router
-from app.api.routers.booking import router as sbook_router
+from app.routers.auth import router as auth_router
+from app.routers.booking import router as sbook_router
 
 main_router = APIRouter()
 
